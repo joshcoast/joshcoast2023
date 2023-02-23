@@ -1,0 +1,1 @@
+[30-Aug-2022 12:14:07 UTC] PHP Fatal error:  require(): Failed opening required 'ABSPATHWPINC/blocks/legacy-widget.php' (include_path='.:/usr/local/php74/pear') in /home/customer/www/joshcoast.com/public_html/wp-includes/blocks/index.php on line 11
