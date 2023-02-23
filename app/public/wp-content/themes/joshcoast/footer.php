@@ -28,20 +28,6 @@
 	</footer><!-- #colophon -->
 </div><!-- #page -->
 
-<div class="search-overlay">
-	<div class="search-overlay__top">
-		<i class="fa-solid fa-magnifying-glass search-overlay__icon" aria-hidden="true" ></i>
-		<div class="container">
-			<input type="text" class="search-term" placeholder="What are you looking for?" id="search-term">
-		</div>
-		<i class="fa-regular fa-circle-xmark search-overlay__close" aria-hidden="true"></i>
-	</div>
-	<div class="container">
-		<div id="search-overlay__results" class="search-overlay__results">
-		</div>
-	</div>
-</div>
-
 <?php wp_footer(); ?>
 
 </body>

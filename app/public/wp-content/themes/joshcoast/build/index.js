@@ -56,6 +56,7 @@ __webpack_require__.r(__webpack_exports__);
 class Search {
   // 1. Describe or create/initiate our object.
   constructor() {
+    this.addSearchHTML();
     this.resultsDiv = jquery__WEBPACK_IMPORTED_MODULE_0___default()("#search-overlay__results");
     this.openButton = jquery__WEBPACK_IMPORTED_MODULE_0___default()(".js-search-trigger");
     this.closeButton = jquery__WEBPACK_IMPORTED_MODULE_0___default()(".search-overlay__close");
@@ -87,7 +88,7 @@ class Search {
           this.resultsDiv.html('<div class="brent-spiner-loader"><i class="fa-solid fa-fan brent-spiner"></i></div>');
           this.isSpinnerShowing = true;
         }
-        this.typingTimer = setTimeout(this.getResults.bind(this), 2000);
+        this.typingTimer = setTimeout(this.getResults.bind(this), 750);
       } else {
         this.resultsDiv.html('');
         this.isSpinnerShowing = false;
@@ -97,22 +98,53 @@ class Search {
   }
   getResults() {
     // the arrow function "=>" doesn't change the value of the "this" keyword.
-    jquery__WEBPACK_IMPORTED_MODULE_0___default().getJSON('http://joshcoast.local/wp-json/wp/v2/pages?search=' + this.searchField.val(), posts => {
+    // See functions file for the wp_localize_script() to understand the joshcoastData.root_url
+    // async with jQuery. the first arg in when(), matches the first arg in the then() anonymise function.
+    jquery__WEBPACK_IMPORTED_MODULE_0___default().when(
+    // This gets returned to the first arg in the then() function.
+    jquery__WEBPACK_IMPORTED_MODULE_0___default().getJSON(joshcoastData.root_url + '/wp-json/wp/v2/posts?search=' + this.searchField.val()),
+    // This gets returned to the second arg in the then() function.
+    jquery__WEBPACK_IMPORTED_MODULE_0___default().getJSON(joshcoastData.root_url + '/wp-json/wp/v2/pages?search=' + this.searchField.val())).then((posts, pages) => {
+      // The posts and the pages arrays return more than just the response, also returns error/success info, so we need to use the [0] to get the actual response.
+      var combinedResults = posts[0].concat(pages[0]);
       this.resultsDiv.html(`
-                <h2>Search Results</h2>
-                <ul>
-                    <li><a href='${posts[0].link}'>${posts[0].title.rendered}</a></li>
-                </ul>
-            `);
+                    <h2>Search Results</h2>
+                    ${combinedResults.length ? '<ul>' : '<p>No search results</p>'}
+                        ${combinedResults.map(item => `<li><a href='${item.link}'>${item.title.rendered}</a> ${item.type == 'post' ? `by ${item.authorName}` : ''} </li>`).join('')}
+                    ${combinedResults.length ? '</ul>' : ''}
+                `);
+      this.isSpinnerShowing = false;
+    }, () => {
+      this.resultsDiv.html('<p>Unexpected Error, please try again.</p>');
     });
   }
   openOverlay() {
     this.searchOverlay.addClass("search-overlay--active");
     jquery__WEBPACK_IMPORTED_MODULE_0___default()('body').addClass("no-scroll");
+    this.searchField.val('');
+    setTimeout(() => this.searchField.focus(), 301);
+    this.isSpinnerShowing = true;
   }
   closeOverlay() {
     this.searchOverlay.removeClass("search-overlay--active");
     jquery__WEBPACK_IMPORTED_MODULE_0___default()('body').removeClass("no-scroll");
+  }
+  addSearchHTML() {
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()("body").append(`
+            <div class="search-overlay">
+                <div class="search-overlay__top">
+                    <i class="fa-solid fa-magnifying-glass search-overlay__icon" aria-hidden="true" ></i>
+                    <div class="container">
+                        <input type="text" class="search-term" placeholder="What are you looking for?" id="search-term">
+                    </div>
+                    <i class="fa-regular fa-circle-xmark search-overlay__close" aria-hidden="true"></i>
+                </div>
+                <div class="container">
+                    <div id="search-overlay__results" class="search-overlay__results">
+                    </div>
+                </div>
+            </div>
+        `);
   }
 }
 /* harmony default export */ __webpack_exports__["default"] = (Search);
