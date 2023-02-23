@@ -1,4 +1,0 @@
-[01-Dec-2022 19:52:01 UTC] PHP Fatal error:  Uncaught Error: Class 'WP_Widget' not found in /home/customer/www/joshcoast.com/public_html/wp-includes/widgets/class-wp-widget-tag-cloud.php:17
-Stack trace:
-#0 {main}
-  thrown in /home/customer/www/joshcoast.com/public_html/wp-includes/widgets/class-wp-widget-tag-cloud.php on line 17
