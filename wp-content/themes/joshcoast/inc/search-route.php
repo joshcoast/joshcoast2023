@@ -12,8 +12,8 @@ function joshcoastRegisterSearch() {
 }
 // "$data" is our Parameter from the url in the API, you can name it whatever you want.
 function joshcoastSearchResults($data) {
-    $portfolios = new WP_Query(array(
-        'post_type' => 'portfolio',
+    $mainQuery = new WP_Query(array(
+        'post_type' => array('post', 'page', 'client'),
         // 's' stands for search, $data is an array from the parameter of the api url.
         // the key 'term' can be anything, it just needs to match the key we use in the url.
         // example http://joshcoast.local/wp-json/joshcoast/v1/search?term=audinate&pee=yellow then our
@@ -22,16 +22,39 @@ function joshcoastSearchResults($data) {
         's' => sanitize_text_field($data['term'])
     ));
 
-    // Make an array that only has the junk we need.
-    $portfolioResults = array();
+    // Make an array that can sort our results into post types.
+    $searchResults = array(
+        'generalInfo' => array(),
+        'client'   => array(),
+        'blog'        => array()
+    );
 
-    while($portfolios->have_posts()) {
-        $portfolios->the_post();
-        array_push($portfolioResults, array(
-            'title' => get_the_title(),
-            'permalink' => get_the_permalink()
-        ));
+    while($mainQuery->have_posts()) {
+        $mainQuery->the_post();
+        // Sort the post into post types.
+        if ( get_post_type() == 'page' ) {
+            array_push($searchResults['generalInfo'], array(
+                'post_type' => get_post_type(),
+                'title' => get_the_title(),
+                'permalink' => get_the_permalink(),
+                'authorName' => get_the_author()
+            ));
+        } elseif ( get_post_type() == 'post' ) {
+            array_push($searchResults['blog'], array(
+                'post_type' => get_post_type(),
+                'title' => get_the_title(),
+                'permalink' => get_the_permalink(),
+                'authorName' => get_the_author()
+            ));
+        } elseif ( get_post_type() == 'client' ) {
+            array_push($searchResults['client'], array(
+                'post_type' => get_post_type(),
+                'title' => get_the_title(),
+                'permalink' => get_the_permalink(),
+                'authorName' => get_the_author()
+            ));
+        }
     }
 
-    return $portfolioResults;
+    return $searchResults;
 }

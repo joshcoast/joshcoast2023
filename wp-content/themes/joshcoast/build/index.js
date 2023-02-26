@@ -97,25 +97,31 @@ class Search {
     this.previousValue = this.searchField.val();
   }
   getResults() {
-    // the arrow function "=>" doesn't change the value of the "this" keyword.
-    // See functions file for the wp_localize_script() to understand the joshcoastData.root_url
-    // async with jQuery. the first arg in when(), matches the first arg in the then() anonymise function.
-    jquery__WEBPACK_IMPORTED_MODULE_0___default().when(
-    // This gets returned to the first arg in the then() function.
-    jquery__WEBPACK_IMPORTED_MODULE_0___default().getJSON(joshcoastData.root_url + '/wp-json/wp/v2/posts?search=' + this.searchField.val()),
-    // This gets returned to the second arg in the then() function.
-    jquery__WEBPACK_IMPORTED_MODULE_0___default().getJSON(joshcoastData.root_url + '/wp-json/wp/v2/pages?search=' + this.searchField.val())).then((posts, pages) => {
-      // The posts and the pages arrays return more than just the response, also returns error/success info, so we need to use the [0] to get the actual response.
-      var combinedResults = posts[0].concat(pages[0]);
+    // We now have a custom api that returns all the post types.
+    jquery__WEBPACK_IMPORTED_MODULE_0___default().getJSON(joshcoastData.root_url + '/wp-json/joshcoast/v1/search?term=' + this.searchField.val(), searchResults => {
       this.resultsDiv.html(`
-                    <h2>Search Results</h2>
-                    ${combinedResults.length ? '<ul>' : '<p>No search results</p>'}
-                        ${combinedResults.map(item => `<li><a href='${item.link}'>${item.title.rendered}</a> ${item.type == 'post' ? `by ${item.authorName}` : ''} </li>`).join('')}
-                    ${combinedResults.length ? '</ul>' : ''}
-                `);
+            <div class="row">
+                <div class="one-third">
+                    <h2>General Information</h2>
+                    ${searchResults.generalInfo.length ? '<ul>' : '<p>No General Information matches that search.</p>'}
+                    ${searchResults.generalInfo.map(item => `<li><a href='${item.permalink}'>${item.title}</a></li>`).join('')}
+                    ${searchResults.generalInfo.length ? '</ul>' : ''}
+                </div>
+                <div class="one-third">
+                    <h2>Clients</h2>
+                    ${searchResults.client.length ? '<ul>' : `<p>No clients match that search. <a href="${joshcoastData.root_url}/portfolio">View Full Portfolio</a></p>`}
+                    ${searchResults.client.map(item => `<li><a href='${item.permalink}'>${item.title}</a></li>`).join('')}
+                    ${searchResults.client.length ? '</ul>' : ''}
+                </div>
+                <div class="one-third">
+                    <h2>Blog</h2>
+                    ${searchResults.blog.length ? '<ul>' : `<p>No blogs match that search. <a href="${joshcoastData.root_url}/blog">View blog</a></p>`}
+                    ${searchResults.blog.map(item => `<li><a href='${item.permalink}'>${item.title}</a> ${item.post_type == 'post' ? `by ${item.authorName}` : ''} </li>`).join('')}
+                    ${searchResults.blog.length ? '</ul>' : ''}
+                </div>
+            </div>
+            `);
       this.isSpinnerShowing = false;
-    }, () => {
-      this.resultsDiv.html('<p>Unexpected Error, please try again.</p>');
     });
   }
   openOverlay() {

@@ -1,40 +1,40 @@
 <?php
 
-// Portfolio Item Custom Post Type
-function portfolio() {
+// Client Item Custom Post Type
+function client() {
 
 	$labels = array(
-		'name'                  => _x( 'Portfolios', 'Post Type General Name', 'joshcoast' ),
-		'singular_name'         => _x( 'Portfolio', 'Post Type Singular Name', 'joshcoast' ),
-		'menu_name'             => __( 'Portfolios', 'joshcoast' ),
-		'name_admin_bar'        => __( 'Portfolio', 'joshcoast' ),
-		'archives'              => __( 'Portfolio Archives', 'joshcoast' ),
-		'attributes'            => __( 'Portfolio Attributes', 'joshcoast' ),
-		'parent_item_colon'     => __( 'Parent Portfolio:', 'joshcoast' ),
-		'all_items'             => __( 'All Portfolios', 'joshcoast' ),
-		'add_new_item'          => __( 'Add New Portfolio', 'joshcoast' ),
+		'name'                  => _x( 'Clients', 'Post Type General Name', 'joshcoast' ),
+		'singular_name'         => _x( 'Client', 'Post Type Singular Name', 'joshcoast' ),
+		'menu_name'             => __( 'Clients', 'joshcoast' ),
+		'name_admin_bar'        => __( 'Client', 'joshcoast' ),
+		'archives'              => __( 'Client Archives', 'joshcoast' ),
+		'attributes'            => __( 'Client Attributes', 'joshcoast' ),
+		'parent_item_colon'     => __( 'Parent Client:', 'joshcoast' ),
+		'all_items'             => __( 'All Clients', 'joshcoast' ),
+		'add_new_item'          => __( 'Add New Client', 'joshcoast' ),
 		'add_new'               => __( 'Add New', 'joshcoast' ),
-		'new_item'              => __( 'New Portfolio', 'joshcoast' ),
-		'edit_item'             => __( 'Edit Portfolio', 'joshcoast' ),
-		'update_item'           => __( 'Update Portfolio', 'joshcoast' ),
-		'view_item'             => __( 'View Portfolio', 'joshcoast' ),
-		'view_items'            => __( 'View Portfolios', 'joshcoast' ),
-		'search_items'          => __( 'Search Portfolio Item', 'joshcoast' ),
+		'new_item'              => __( 'New Client', 'joshcoast' ),
+		'edit_item'             => __( 'Edit Client', 'joshcoast' ),
+		'update_item'           => __( 'Update Client', 'joshcoast' ),
+		'view_item'             => __( 'View Client', 'joshcoast' ),
+		'view_items'            => __( 'View Clients', 'joshcoast' ),
+		'search_items'          => __( 'Search Client Item', 'joshcoast' ),
 		'not_found'             => __( 'Not found', 'joshcoast' ),
 		'not_found_in_trash'    => __( 'Not found in Trash', 'joshcoast' ),
 		'featured_image'        => __( 'Featured Image', 'joshcoast' ),
 		'set_featured_image'    => __( 'Set featured image', 'joshcoast' ),
 		'remove_featured_image' => __( 'Remove featured image', 'joshcoast' ),
 		'use_featured_image'    => __( 'Use as featured image', 'joshcoast' ),
-		'insert_into_item'      => __( 'Insert into Portfolio', 'joshcoast' ),
-		'uploaded_to_this_item' => __( 'Uploaded to this Portfolio', 'joshcoast' ),
-		'items_list'            => __( 'Portfolios list', 'joshcoast' ),
-		'items_list_navigation' => __( 'Portfolios list navigation', 'joshcoast' ),
-		'filter_items_list'     => __( 'Filter Portfolios list', 'joshcoast' ),
+		'insert_into_item'      => __( 'Insert into Client', 'joshcoast' ),
+		'uploaded_to_this_item' => __( 'Uploaded to this Client', 'joshcoast' ),
+		'items_list'            => __( 'Clients list', 'joshcoast' ),
+		'items_list_navigation' => __( 'Clients list navigation', 'joshcoast' ),
+		'filter_items_list'     => __( 'Filter Clients list', 'joshcoast' ),
 	);
 	$args = array(
-		'label'                 => __( 'Portfolio', 'joshcoast' ),
-		'description'           => __( 'A single portfolio item.', 'joshcoast' ),
+		'label'                 => __( 'Client', 'joshcoast' ),
+		'description'           => __( 'A single client item.', 'joshcoast' ),
 		'labels'                => $labels,
 		'supports'              => array(
                                         'title',
@@ -42,7 +42,8 @@ function portfolio() {
                                         'thumbnail',
                                         'revisions',
                                         'page-attributes',
-                                        'post-formats'
+                                        'post-formats',
+										'excerpt'
                                     ),
 		'hierarchical'          => false,
 		'public'                => true,
@@ -59,7 +60,7 @@ function portfolio() {
 		'capability_type'       => 'page',
 		'show_in_rest'          => true,
 	);
-	register_post_type( 'portfolio', $args );
+	register_post_type( 'client', $args );
 
 }
-add_action( 'init', 'portfolio', 0 );
+add_action( 'init', 'client', 0 );

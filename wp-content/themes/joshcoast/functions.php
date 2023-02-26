@@ -19,6 +19,11 @@ function joshcoast_custom_rest() {
 
 add_action('rest_api_init', 'joshcoast_custom_rest');
 
+function jc_add_excerpts_to_pages() {
+	add_post_type_support( 'page', 'excerpt' );
+}
+add_action( 'init', 'jc_add_excerpts_to_pages' );
+
 if ( ! defined( '_S_VERSION' ) ) {
 	// Replace the version number of the theme on each release.
 	define( '_S_VERSION', '1.0.0' );
@@ -187,4 +192,6 @@ require get_template_directory() . '/inc/customizer.php';
 if ( defined( 'JETPACK__VERSION' ) ) {
 	require get_template_directory() . '/inc/jetpack.php';
 }
+
+
 
